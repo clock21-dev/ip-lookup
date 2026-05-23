@@ -284,24 +284,21 @@ body::before{
 <script>
 async function lookupIP() {
 
-    const ip =
-    document.getElementById(
-    "ipInput").value.trim();
+    const ip = document
+    .getElementById("ipInput")
+    .value.trim();
+
+    const url = ip
+    ? `https://ipapi.co/${ip}/json/`
+    : `https://ipapi.co/json/`;
 
     try {
 
-        // API lebih lengkap
-        const response = await fetch(
-        `https://ipwho.is/${ip}`
-        );
+        const response =
+        await fetch(url);
 
         const data =
         await response.json();
-
-        if (!data.success) {
-            alert("IP tidak valid!");
-            return;
-        }
 
         document.getElementById(
         "result").innerHTML = `
@@ -330,9 +327,14 @@ async function lookupIP() {
         <div class="row">
             <div class="label">Negara</div>
             <div class="value">
+                ${data.country_name || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Kode Negara</div>
+            <div class="value">
                 ${data.country_code || '-'}
-                |
-                ${data.country || '-'}
             </div>
         </div>
 
@@ -360,28 +362,28 @@ async function lookupIP() {
         <div class="row">
             <div class="label">Timezone</div>
             <div class="value">
-                ${data.timezone?.id || '-'}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="label">ASN</div>
-            <div class="value">
-                ${data.connection?.asn || '-'}
+                ${data.timezone || '-'}
             </div>
         </div>
 
         <div class="row">
             <div class="label">Provider</div>
             <div class="value">
-                ${data.connection?.org || '-'}
+                ${data.org || '-'}
             </div>
         </div>
         `;
 
     } catch (err) {
+
         console.log(err);
-        alert("Gagal mengambil data IP!");
+
+        document.getElementById(
+        "result").innerHTML = `
+        <div style="padding:20px;color:red;text-align:center">
+            Gagal mengambil data IP
+        </div>
+        `;
     }
 }
 
