@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IAAM21 X TOCLOCK.ID - IP Lookup</title>
+
+<link rel="icon" type="image/png" href="am.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    background:
+    radial-gradient(circle at top,#260000,#050505);
+    overflow-x:hidden;
+}
+
+body::before{
+    content:'';
+    position:fixed;
+    inset:0;
+    background:
+    linear-gradient(135deg,
+    rgba(255,0,0,.06),
+    transparent 30%,
+    transparent 70%,
+    rgba(255,0,0,.06));
+    pointer-events:none;
+}
+
+.container{
+    width:720px;
+    background:#0e0e0e;
+    border-radius:25px;
+    overflow:hidden;
+    border:1px solid rgba(255,0,0,.2);
+    box-shadow:
+    0 0 40px rgba(255,0,0,.15);
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    padding:35px 20px;
+    border-bottom:1px solid rgba(255,255,255,.05);
+    background:
+    linear-gradient(to bottom,
+    rgba(255,0,0,.08),
+    transparent);
+}
+
+.logo{
+    width:120px;
+    margin-bottom:12px;
+    filter:
+    drop-shadow(0 0 10px rgba(255,0,0,.4));
+}
+
+.header h1{
+    color:#fff;
+    font-size:38px;
+    font-weight:700;
+}
+
+.header p{
+    color:#ff2e2e;
+    letter-spacing:5px;
+    font-size:12px;
+}
+
+/* SEARCH */
+.search-box{
+    display:flex;
+    gap:12px;
+    padding:20px;
+}
+
+.search-box input{
+    flex:1;
+    height:60px;
+    background:#151515;
+    border:1px solid #262626;
+    border-radius:16px;
+    outline:none;
+    color:#fff;
+    padding:0 20px;
+    font-size:17px;
+}
+
+.search-box input:focus{
+    border-color:red;
+}
+
+.search-box button{
+    width:200px;
+    border:none;
+    border-radius:16px;
+    cursor:pointer;
+    background:
+    linear-gradient(to right,
+    #b90000,#ff2a2a);
+    color:#fff;
+    font-size:17px;
+    font-weight:600;
+    transition:.25s;
+}
+
+.search-box button:hover{
+    transform:translateY(-2px);
+    box-shadow:
+    0 10px 20px rgba(255,0,0,.3);
+}
+
+/* TABLE */
+.table{
+    padding:20px;
+}
+
+.row{
+    display:flex;
+    border-radius:15px;
+    overflow:hidden;
+    margin-bottom:10px;
+}
+
+.label{
+    width:230px;
+    background:#171717;
+    color:#ff3a3a;
+    padding:17px;
+    font-weight:600;
+    border-left:3px solid red;
+}
+
+.value{
+    flex:1;
+    background:#232323;
+    color:#ddd;
+    padding:17px;
+}
+
+.footer{
+    text-align:center;
+    padding:20px;
+    color:#666;
+    border-top:1px solid rgba(255,255,255,.05);
+}
+
+.footer span{
+    color:red;
+}
+
+.loading{
+    text-align:center;
+    color:#888;
+    padding:20px;
+}
+
+/* MOBILE */
+@media(max-width:720px){
+
+    .container{
+        width:100%;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+
+    .search-box button{
+        width:100%;
+        height:55px;
+    }
+
+    .row{
+        flex-direction:column;
+    }
+
+    .label{
+        width:100%;
+    }
+
+    .header h1{
+        font-size:28px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <img src="logo.png" class="logo">
+        <h1>IAAM21 X TOCLOCK.ID</h1>
+        <p>SISTEM PENCARIAN IP PRIVAT</p>
+    </div>
+
+    <div class="search-box">
+        <input
+        type="text"
+        id="ipInput"
+        placeholder="Masukkan IP Address">
+
+        <button onclick="lookupIP()">
+            Pencarian IP
+        </button>
+    </div>
+
+    <div class="table" id="result">
+        <div class="loading">
+            Memuat data...
+        </div>
+    </div>
+
+    <div class="footer">
+        Powered By
+        <span>IAAM21 X TOCLOCK.ID</span>
+    </div>
+
+</div>
+
+<script>
+async function lookupIP(){
+
+    const ip = document
+    .getElementById("ipInput")
+    .value.trim();
+
+    const url = ip
+    ? `https://get.geojs.io/v1/ip/geo/${ip}.json`
+    : `https://get.geojs.io/v1/ip/geo.json`;
+
+    try{
+
+        const response =
+        await fetch(url);
+
+        const data =
+        await response.json();
+
+        document
+        .getElementById("result")
+        .innerHTML = `
+
+        <div class="row">
+            <div class="label">Alamat IP</div>
+            <div class="value">
+                ${data.ip || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Kota</div>
+            <div class="value">
+                ${data.city || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Wilayah</div>
+            <div class="value">
+                ${data.region || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Negara</div>
+            <div class="value">
+                ${data.country || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Kode Negara</div>
+            <div class="value">
+                ${data.country_code || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Latitude</div>
+            <div class="value">
+                ${data.latitude || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Longitude</div>
+            <div class="value">
+                ${data.longitude || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Timezone</div>
+            <div class="value">
+                ${data.timezone || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">Organization</div>
+            <div class="value">
+                ${data.organization_name || '-'}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="label">ASN</div>
+            <div class="value">
+                ${data.asn || '-'}
+            </div>
+        </div>
+
+        `;
+
+    }catch(error){
+
+        console.log(error);
+
+        document
+        .getElementById("result")
+        .innerHTML = `
+        <div class="loading">
+            Gagal mengambil data IP
+        </div>
+        `;
+    }
+}
+
+/* AUTO LOAD */
+lookupIP();
+</script>
+
+</body>
+</html>
