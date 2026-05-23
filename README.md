@@ -1,7 +1,5 @@
 # 🌐 IAAM21 X TOCLOCK.ID - IP Lookup
 
-![Preview](https://b.top4top.io/p_37950zufo1.png)
-
 ## 🚀 About
 
 **IAAM21 X TOCLOCK.ID - IP Lookup** adalah website pencarian informasi alamat IP dengan tampilan modern, dark-red cyber style, dan sistem lookup cepat.
